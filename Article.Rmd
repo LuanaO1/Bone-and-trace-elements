@@ -1,0 +1,128 @@
+---
+title             : "Correlation of Microelements and Bone Pathologies: A meta-analysis"
+shorttitle        : "CMBP"
+
+author: 
+  - name          : "Luana-Stefana Opariuc-Dan"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "University Street 16, Iasi 700115, Romania"
+    email         : "luana-stefana_c_opariuc-dan@d.umfiasi.ro"
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Conceptualization
+      - Writing - Original Draft Preparation
+      - Writing - Review & Editing
+      - Methodology
+      - Validation
+      - Investigation
+  - name          : "Cornelia Geanina Mircea"
+    affiliation   : "1"
+    role:
+      - Writing - Review & Editing
+      - Project administration
+      - Resources
+      - Validation
+      - Supervision
+  - name          : "Cristian Opariuc-Dan"
+    affiliation   : "2"
+    role:
+      - Formal analysis
+      - Data curation
+      - Visualisation
+      - Validation
+
+affiliation:
+  - id            : "1"
+    institution   : "Grigore T. Popa University of Medicine and Pharmacy"
+  - id            : "2"
+    institution   : "University of Bucharest"
+
+authornote: |
+  Luana-Stefana Opariuc-Dan, PhD Student, Doctoral School, Faculty of Pharmacy, Department of Pharmaceutical Biochemistry and Clinical Laboratory, Grigore T. Popa University of Medicine and Pharmacy, Iasi, Romania.
+  
+  Cornelia Geanina Mircea, PhD Professor, Doctoral School, Faculty of Pharmacy, Department of Pharmaceutical Biochemistry and Clinical Laboratory, Grigore T. Popa University of Medicine and Pharmacy, Iasi, Romania.
+  
+  Cristian Opariuc-Dan, PhD Lecturer, Doctoral School, Faculty of Psychology and Educational Sciences, University of Bucharest, Romania.
+
+abstract: |
+  TO BE DONE
+  
+keywords          : "keywords"
+wordcount         : "63 words in text body, 49 words in reference section"
+
+bibliography      : ["r-references.bib", "CMBP.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa7"
+classoption       : "man"
+output            : papaja::apa6_pdf
+
+header-includes:
+  - |
+    \makeatletter
+    \renewcommand{\paragraph}{\@startsection{paragraph}{4}{\parindent}%
+      {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+      {-1em}%
+      {\normalfont\normalsize\bfseries\typesectitle}}
+    
+    \renewcommand{\subparagraph}[1]{\@startsection{subparagraph}{5}{1em}%
+      {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+      {-\z@\relax}%
+      {\normalfont\normalsize\bfseries\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
+    \makeatother
+  - \usepackage[document]{ragged2e}
+
+---
+
+```{r setup, include = FALSE}
+  library(papaja)
+  r_refs("r-references.bib")
+```
+
+```{r analysis-preferences}
+  # Seed for random number generation
+  set.seed(5447)
+  knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Introduction
+
+
+
+# Methods
+A systematic literature search will be conducted in English, using the PRISMA workflow [@page_etal21], via the following databases: *PubMed, Embase, Elsevier Science Direct, MedLine, Elsevier Scopus*, and *SpringerLink*, without imposing any limitations on publication years, and the following search phrase: *"trace elements" AND osteoporosis AND (osteoclast OR osteoblast) AND (zinc OR mineralization)*.
+
+The resulting studies will then be selected based on the following **inclusion criteria**:  The following works will be **explicitly excluded**: (1) chapters in books or encyclopedias, (2) editorials, (3) reviews and meta-analysis, (4) case studies, (5) studies conducted on animals. Duplicates will be also removed, keeping a single study.
+
+## Quality assessment and coding
+Two authors (LSOD and COD) will independently code the retained studies based on coding manual, and disagreements will be arbitrated by the third author (CGM). The same procedure will be used to evaluate the quality of the studies, using QUADAS-2 standards [@QUADAS2]. 
+
+## Data analysis
+We used `r cite_r("r-references.bib")` for all our analyses.
+
+
+# Results
+
+## Literature search results
+
+## Quality assessments results
+
+## Data analysis
+
+
+# Discussion
+
+
+\newpage
+
+# References
+
+::: {#refs custom-style="Bibliography"}
+:::
