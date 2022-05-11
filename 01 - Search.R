@@ -55,5 +55,30 @@ PRISMA <- PRISMA_flowdiagram(PRISMA_data(PRISMA.tpl),
 PRISMA
 
 # Searching for duplicates entries ####
+save(cen.tbl, file = "Articles 1.RData")
+gasite <- find_duplicates(data = cen.tbl, 
+                          match_variable = "DOI", match_function = "exact")
+gasite <- extract_unique_references(cen.tbl, gasite)
+nr.duplicate <- sum(gasite$n_duplicates) - nrow(gasite)
+# Manually scanning remaining duplicates
+result <- screen_duplicates(x = gasite)
+nr.duplicate <- nr.duplicate + nrow(gasite) - nrow(result)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "duplicates")] <- nr.duplicate
+save(result, file = "Articles 2.RData")
 
+# Topic screening ####
+result.2 <- screen_topics(x = result)
+tmp <- result.2$raw %>% 
+  filter(screened_topics =="selected")
+nr.del.topics <- nrow(result) - nrow (tmp)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "excluded_automatic")] <- nr.del.topics
+save(tmp, file = "Articles 3.RData")
 
+# Title screening ####
+load("Articles 3.RData")
+result.3 <- screen_titles(x = tmp)
+tmp <- result.3$raw %>% 
+  filter(screened_titles =="selected")
+nr.del.titles <- nrow(result.2) - nrow (tmp)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "excluded_other")] <- nr.del.titles
+save(tmp, file = "Articles 4.RData")

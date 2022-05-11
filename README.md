@@ -11,3 +11,4 @@ osteoporosis AND "trace elements" AND densitometry
 PubMed
 Elsevier Science Direct
 MedLine
+
