@@ -42,17 +42,13 @@ if(is.na(cen.tbl[1,])) cen.tbl <- cen.tbl[-1,]
 rm(rw, sou, abstract, authors, db, dbase, doi, id, journal, keywords, rec, title, type, year)
 # Saving centralizer table
 save(cen.tbl, file = "01-Centralizing table.RData"); total.db <- nrow(cen.tbl)
+load("01-Centralizing table.RData"); total.db <- nrow(cen.tbl)
 
 # Creating PRISMA structure ####
 PRISMA.tpl <- read.csv(system.file("extdata", "PRISMA.csv", package = "PRISMA2020"))
 PRISMA.tpl <- PRISMA.tpl %>% 
   mutate(boxtext = case_when(data == "identification" ~ "Identification", T~boxtext))
 PRISMA.tpl$n[which(PRISMA.tpl$data == "database_results")] <- total.db
-
-# Drawing PRISMA flow diagram
-PRISMA <- PRISMA_flowdiagram(PRISMA_data(PRISMA.tpl),
-                             interactive = T, previous = F, other = F)
-PRISMA
 
 # Searching for duplicates entries ####
 save(cen.tbl, file = "Articles 1.RData")
@@ -63,22 +59,48 @@ nr.duplicate <- sum(gasite$n_duplicates) - nrow(gasite)
 # Manually scanning remaining duplicates
 result <- screen_duplicates(x = gasite)
 nr.duplicate <- nr.duplicate + nrow(gasite) - nrow(result)
-PRISMA.tpl$n[which(PRISMA.tpl$data == "duplicates")] <- nr.duplicate
 save(result, file = "Articles 2.RData")
+load("Articles 2.RData"); nr.duplicate <- nrow(cen.tbl) - nrow(result)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "duplicates")] <- nr.duplicate
 
 # Topic screening ####
 result.2 <- screen_topics(x = result)
 tmp <- result.2$raw %>% 
   filter(screened_topics =="selected")
-nr.del.topics <- nrow(result) - nrow (tmp)
-PRISMA.tpl$n[which(PRISMA.tpl$data == "excluded_automatic")] <- nr.del.topics
 save(tmp, file = "Articles 3.RData")
+load("Articles 3.RData"); nr.del.topics <- nrow(result) - nrow (tmp)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "excluded_automatic")] <- nr.del.topics
 
 # Title screening ####
 load("Articles 3.RData")
 result.3 <- screen_titles(x = tmp)
 tmp <- result.3$raw %>% 
-  filter(screened_titles =="selected")
-nr.del.titles <- nrow(result.2) - nrow (tmp)
-PRISMA.tpl$n[which(PRISMA.tpl$data == "excluded_other")] <- nr.del.titles
+  dplyr::filter(screened_titles =="selected")
 save(tmp, file = "Articles 4.RData")
+load("Articles 4.RData"); nr.del.titles <- nr.del.topics - nrow (tmp)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "excluded_other")] <- nr.del.titles
+nr.screened <- nrow (tmp)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "records_screened")] <- nr.screened
+
+# Abstract screening ####
+result.4 <- screen_abstracts(x = tmp)
+tmp <- result.4 %>% 
+  dplyr::filter(screened_abstracts == "selected")
+save(tmp, file = "Articles 5.RData")
+load("Articles 5.RData"); nr.del.abstracts <- nr.screened - nrow (tmp)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "records_excluded")] <- nr.del.abstracts
+nr.sought <- nrow (tmp)
+PRISMA.tpl$n[which(PRISMA.tpl$data == "dbr_sought_reports")] <- nr.sought
+
+# Articles sought for retrieval
+sought.art <- tmp;rm(tmp, result, result.2, result.3, result.4, cen.tbl)
+save(sought.art, file = "Retrieved.RData")
+sought.art$doi
+
+
+
+
+
+# Drawing PRISMA flow diagram
+PRISMA <- PRISMA_flowdiagram(PRISMA_data(PRISMA.tpl),
+                             interactive = T, previous = F, other = F); PRISMA
